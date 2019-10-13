@@ -7,10 +7,10 @@
 <script>
 import Epub from "epubjs";
 global.ePub = Epub;
-import {ebookMixin} from '../../utils/mixin'
+import { ebookMixin } from "../../utils/mixin";
 
 export default {
-  mixins:[ebookMixin],
+  mixins: [ebookMixin],
   mounted() {
     const fileName = this.$route.params.fileName.split("|").join("/");
     this.setFileName(fileName).then(() => {
@@ -21,30 +21,33 @@ export default {
     prevPage() {
       if (this.rendition) {
         this.rendition.prev();
-        this.hideTitleAndMenu()
+        this.hideTitleAndMenu();
       }
     },
     nextPage() {
       if (this.rendition) {
         this.rendition.next();
-        this.hideTitleAndMenu()
+        this.hideTitleAndMenu();
       }
     },
     toggleTitleAndMenu() {
-      if(this.menuVisible) {
-        this.setSettingVisible(-1)
+      if (this.menuVisible) {
+        this.setSettingVisible(-1);
+        this.setFontFamilyVisible(false);
       }
-      this.setMenuVisible(!this.menuVisible)
+      this.setMenuVisible(!this.menuVisible);
     },
-    hideTitleAndMenu(){
+    hideTitleAndMenu() {
       // this.$store.dispatch('setMenuVisible', false)
-      this.setMenuVisible(false)
-      this.setSettingVisible(-1)
+      this.setMenuVisible(false);
+      this.setSettingVisible(-1);
+      this.setFontFamilyVisible(false);
     },
     initEpub() {
-      const url = `http://192.168.1.102:3000/epub/${this.fileName}.epub`;
+      const url = `${process.env.VUE_APP_RES_URL}/epub/${this.fileName}.epub`;
+      console.log(url)
       this.book = new Epub(url);
-      this.setCurrentBook(this.book)
+      this.setCurrentBook(this.book);
       this.rendition = this.book.renderTo("read", {
         width: innerWidth,
         height: innerHeight,
@@ -65,9 +68,25 @@ export default {
         } else {
           this.toggleTitleAndMenu();
         }
-      //禁止默认调用和传播
+        //禁止默认调用和传播
         event.preventDefault();
         event.stopPropagation();
+      });
+      this.rendition.hooks.content.register(contents => {
+        Promise.all([
+          contents.addStylesheet(
+            `${process.env.VUE_APP_RES_URL}/fonts/daysOne.css`
+          ),
+          contents.addStylesheet(
+            `${process.env.VUE_APP_RES_URL}/fonts/cabin.css`
+          ),
+          contents.addStylesheet(
+            `${process.env.VUE_APP_RES_URL}fonts/montserrat.css`
+          ),
+          contents.addStylesheet(
+            `${process.env.VUE_APP_RES_URL}/fonts/tangerine.css`
+          )
+        ]).then(() => {});
       });
     }
   }
