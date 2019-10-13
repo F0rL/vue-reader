@@ -44,3 +44,13 @@
 2019/10/13 13:13:36 [notice] 13164#13056: signal process started
 2019/10/13 13:15:04 [notice] 13040#5868: signal process started
 2019/10/13 13:19:11 [notice] 10452#9048: signal process started
+2019/10/13 13:58:00 [error] 13108#13424: *4 CreateFile() "C:/Aman/myCode/vue-reader/source/raintime" failed (2: The system cannot find the file specified), client: 192.168.1.102, server: localhost, request: "GET /raintime HTTP/1.1", host: "192.168.1.102:3000"
+2019/10/13 13:58:01 [error] 13108#13424: *4 CreateFile() "C:/Aman/myCode/vue-reader/source/favicon.ico" failed (2: The system cannot find the file specified), client: 192.168.1.102, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "192.168.1.102:3000", referrer: "http://192.168.1.102:3000/raintime"
+2019/10/13 13:58:16 [error] 13108#13424: *4 CreateFile() "C:/Aman/myCode/vue-reader/source/raintime.equb" failed (2: The system cannot find the file specified), client: 192.168.1.102, server: localhost, request: "GET /raintime.equb HTTP/1.1", host: "192.168.1.102:3000"
+2019/10/13 13:58:55 [error] 13108#13424: *7 CreateFile() "C:/Aman/myCode/vue-reader/source/raintime.equb" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /raintime.equb HTTP/1.1", host: "localhost:3000"
+2019/10/13 14:19:41 [notice] 35188#35196: signal process started
+2019/10/13 14:32:38 [notice] 6496#36712: signal process started
+2019/10/13 14:33:38 [error] 35904#12972: *25 CreateFile() "D:\softcache\moocReader\epub/2015_Book_ProtectingTheRightsOfPeopleWit" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /2015_Book_ProtectingTheRightsOfPeopleWit HTTP/1.1", host: "localhost:3000"
+2019/10/13 14:33:57 [error] 35904#12972: *30 CreateFile() "D:\softcache\moocReader\epub/2015_Book_ProtectingTheRightsOfPeopleWit.epub" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /2015_Book_ProtectingTheRightsOfPeopleWit.epub HTTP/1.1", host: "localhost:3000", referrer: "http://localhost:8080/"
+2019/10/13 14:35:11 [emerg] 35476#35360: invalid number of arguments in "root" directive in C:\Aman\myCode\vue-reader\nginx-1.16.1/conf/nginx.conf:85
+2019/10/13 14:35:20 [notice] 26916#26956: signal process started
