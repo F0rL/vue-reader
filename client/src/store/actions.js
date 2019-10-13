@@ -4,6 +4,12 @@ const actions = {
   },
   setMenuVisible: ({commit, state}, menuVisible) => {
     return commit('SET_MENUVISIBLE', menuVisible)
+  },
+  setSettingVisible: ({commit, state}, settingVisible) => {
+    return commit('SET_SETTINGVISIBLE', settingVisible)
+  },
+  setDefaultFontSize: ({commit, state}, defaultFontSize) => {
+    return commit('SET_DEFAULT_FONT', defaultFontSize)
   }
 }
 
