@@ -6,14 +6,14 @@
 
 <script>
 import Epub from "epubjs";
-import {ebookMixin} from '../../utils/mixin'
 global.ePub = Epub;
+import {ebookMixin} from '../../utils/mixin'
 
 export default {
   mixins:[ebookMixin],
   mounted() {
     const fileName = this.$route.params.fileName.split("|").join("/");
-    this.$store.dispatch("setFileName", fileName).then(() => {
+    this.setFileName(fileName).then(() => {
       this.initEpub();
     });
   },
@@ -31,10 +31,11 @@ export default {
       }
     },
     toggleTitleAndMenu() {
-      this.$store.dispatch('setMenuVisible', !this.menuVisible)
+      this.setMenuVisible(!this.menuVisible)
     },
     hideTitleAndMenu(){
-      this.$store.dispatch('setMenuVisible', false)
+      // this.$store.dispatch('setMenuVisible', false)
+      this.setMenuVisible(false)
     },
     initEpub() {
       const url = `http://192.168.1.102:3000/epub/${this.fileName}.epub`;
