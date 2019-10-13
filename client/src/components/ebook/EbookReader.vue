@@ -24,15 +24,21 @@ export default {
   },
   methods: {
     initEpub() {
-      const url = `http://localhost:3000/epub/${this.fileName}.epub`;
-      this.book  = new Epub(url)
-      this.rendition = this.book.renderTo('read',{
+      const url = `http://192.168.1.102:3000/epub/${this.fileName}.epub`;
+      this.book = new Epub(url);
+      this.rendition = this.book.renderTo("read", {
         width: innerWidth,
         height: innerHeight,
-        method: 'default'
-      })
-      this.rendition.display()
-}
+        method: "default"
+      });
+      this.rendition.display();
+      this.rendition.on("touchstart", event => {
+        console.log(event);
+      });
+      this.rendition.on("touchend", event => {
+        console.log(event);
+      });
+    }
   }
 };
 </script>
