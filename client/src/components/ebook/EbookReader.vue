@@ -11,45 +11,47 @@ import {
   getFontFamily,
   saveFontFamily,
   getFontSize,
-  saveFontSize
+  saveFontSize,
+  getTheme,
+  saveTheme
 } from '../../utils/localStorage'
 global.ePub = Epub
 
 export default {
   mixins: [ebookMixin],
-  mounted () {
+  mounted() {
     const fileName = this.$route.params.fileName.split('|').join('/')
     this.setFileName(fileName).then(() => {
       this.initEpub()
     })
   },
   methods: {
-    prevPage () {
+    prevPage() {
       if (this.rendition) {
         this.rendition.prev()
         this.hideTitleAndMenu()
       }
     },
-    nextPage () {
+    nextPage() {
       if (this.rendition) {
         this.rendition.next()
         this.hideTitleAndMenu()
       }
     },
-    toggleTitleAndMenu () {
+    toggleTitleAndMenu() {
       if (this.menuVisible) {
         this.setSettingVisible(-1)
         this.setFontFamilyVisible(false)
       }
       this.setMenuVisible(!this.menuVisible)
     },
-    hideTitleAndMenu () {
+    hideTitleAndMenu() {
       // this.$store.dispatch('setMenuVisible', false)
       this.setMenuVisible(false)
       this.setSettingVisible(-1)
       this.setFontFamilyVisible(false)
     },
-    initFontSize () {
+    initFontSize() {
       let fontSize = getFontSize(this.fileName)
       if (!fontSize) {
         saveFontSize(this.fileName, this.defaultFontSize)
@@ -58,7 +60,7 @@ export default {
         this.setDefaultFontSize(fontSize)
       }
     },
-    initFontFamily () {
+    initFontFamily() {
       let font = getFontFamily(this.fileName)
       if (!font) {
         saveFontFamily(this.fileName, this.defaultFontFamily)
@@ -67,7 +69,19 @@ export default {
         this.setDefaultFontFamily(font)
       }
     },
-    initEpub () {
+    initTheme() {
+      let defaultTheme = getTheme(this.fileName)
+      if (!defaultTheme) {
+        defaultTheme = this.themeList[0].name
+        this.setDefaultTheme(defaultTheme)
+        saveTheme(this.fileName, defaultTheme)
+      }
+      this.themeList.forEach(theme => {
+        this.rendition.themes.register(theme.name, theme.style)
+      })
+      this.rendition.themes.select(defaultTheme)
+    },
+    initEpub() {
       const url = `${process.env.VUE_APP_RES_URL}/epub/${this.fileName}.epub`
       // console.log(url)
       this.book = new Epub(url)
@@ -80,6 +94,7 @@ export default {
       this.rendition.display().then(() => {
         this.initFontSize()
         this.initFontFamily()
+        this.initTheme()
       })
       this.rendition.on('touchstart', event => {
         this.touchStartX = event.changedTouches[0].clientX

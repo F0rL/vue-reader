@@ -12,7 +12,7 @@ const messages = {
 }
 
 let locale = getLocale()
-if (!locale) { 
+if (!locale) {
   locale = 'cn'
   saveLocale(locale)
 }
