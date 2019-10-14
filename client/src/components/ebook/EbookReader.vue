@@ -81,11 +81,7 @@ export default {
       })
       this.rendition.themes.select(defaultTheme)
     },
-    initEpub() {
-      const url = `${process.env.VUE_APP_RES_URL}/epub/${this.fileName}.epub`
-      // console.log(url)
-      this.book = new Epub(url)
-      this.setCurrentBook(this.book)
+    initRenditon() {
       this.rendition = this.book.renderTo('read', {
         width: innerWidth,
         height: innerHeight,
@@ -97,6 +93,24 @@ export default {
         this.initTheme()
         this.initGlobalStyle()
       })
+      this.rendition.hooks.content.register(contents => {
+        Promise.all([
+          contents.addStylesheet(
+            `${process.env.VUE_APP_RES_URL}/fonts/daysOne.css`
+          ),
+          contents.addStylesheet(
+            `${process.env.VUE_APP_RES_URL}/fonts/cabin.css`
+          ),
+          contents.addStylesheet(
+            `${process.env.VUE_APP_RES_URL}fonts/montserrat.css`
+          ),
+          contents.addStylesheet(
+            `${process.env.VUE_APP_RES_URL}/fonts/tangerine.css`
+          )
+        ]).then(() => {})
+      })
+    },
+    initGesture() {
       this.rendition.on('touchstart', event => {
         this.touchStartX = event.changedTouches[0].clientX
         this.touchStartTime = event.timeStamp
@@ -115,22 +129,25 @@ export default {
         event.preventDefault()
         event.stopPropagation()
       })
-      this.rendition.hooks.content.register(contents => {
-        Promise.all([
-          contents.addStylesheet(
-            `${process.env.VUE_APP_RES_URL}/fonts/daysOne.css`
-          ),
-          contents.addStylesheet(
-            `${process.env.VUE_APP_RES_URL}/fonts/cabin.css`
-          ),
-          contents.addStylesheet(
-            `${process.env.VUE_APP_RES_URL}fonts/montserrat.css`
-          ),
-          contents.addStylesheet(
-            `${process.env.VUE_APP_RES_URL}/fonts/tangerine.css`
+    },
+    initEpub() {
+      const url = `${process.env.VUE_APP_RES_URL}/epub/${this.fileName}.epub`
+      // console.log(url)
+      this.book = new Epub(url)
+      this.setCurrentBook(this.book)
+      this.initRenditon()
+      this.initGesture()
+      this.book.ready
+        .then(() => {
+          // 粗糙的分页
+          return this.book.locations.generate(
+            750 * (window.innerWidth / 375) * (getFontSize(this.fileName) / 16)
           )
-        ]).then(() => {})
-      })
+        })
+        .then(locations => {
+          // console.log(locations)
+          this.setBookAvailable(true)
+        })
     }
   }
 }
