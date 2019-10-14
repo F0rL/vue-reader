@@ -53,7 +53,6 @@ export default {
   display: flex;
   width: 100%;
   height: px2rem(48);
-  background-color: #fff;
   box-shadow: 0 px2rem(-8) px2rem(8) rgba(0, 0, 0, 0.15);
   font-size: px2rem(22);
   &.hide-box-shadow {

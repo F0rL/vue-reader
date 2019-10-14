@@ -73,9 +73,9 @@ export default {
       let defaultTheme = getTheme(this.fileName)
       if (!defaultTheme) {
         defaultTheme = this.themeList[0].name
-        this.setDefaultTheme(defaultTheme)
         saveTheme(this.fileName, defaultTheme)
       }
+      this.setDefaultTheme(defaultTheme)
       this.themeList.forEach(theme => {
         this.rendition.themes.register(theme.name, theme.style)
       })
@@ -95,6 +95,7 @@ export default {
         this.initFontSize()
         this.initFontFamily()
         this.initTheme()
+        this.initGlobalStyle()
       })
       this.rendition.on('touchstart', event => {
         this.touchStartX = event.changedTouches[0].clientX
