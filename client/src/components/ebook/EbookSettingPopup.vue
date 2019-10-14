@@ -5,7 +5,7 @@
         <div class="ebook-popup-title-icon" @click="hide">
           <span class="icon-down2"></span>
         </div>
-        <span class="ebook-popup-title-text">选择字体</span>
+        <span class="ebook-popup-title-text">{{$t('book.selectFont')}}</span>
       </div>
       <div class="ebook-popup-list-wrapper">
         <div
@@ -25,35 +25,35 @@
 </template>
 
 <script>
-import { ebookMixin } from "../../utils/mixin";
-import { FONT_FAMILY } from "../../utils/book";
+import { ebookMixin } from '../../utils/mixin'
+import { FONT_FAMILY } from '../../utils/book'
 import { saveFontFamily } from '../../utils/localStorage'
 
 export default {
   mixins: [ebookMixin],
-  data() {
+  data () {
     return {
       fontFamilyList: FONT_FAMILY
-    };
+    }
   },
   methods: {
-    hide() {
-      this.setFontFamilyVisible(false);
+    hide () {
+      this.setFontFamilyVisible(false)
     },
-    isSelected(item) {
-      return this.defaultFontFamily === item.font;
+    isSelected (item) {
+      return this.defaultFontFamily === item.font
     },
-    setFontFamily(font) {
-      this.setDefaultFontFamily(font);
+    setFontFamily (font) {
+      this.setDefaultFontFamily(font)
       saveFontFamily(this.fileName, font)
-      if (font === "Default") {
-        this.currentBook.rendition.themes.font("Times New Roman");
+      if (font === 'Default') {
+        this.currentBook.rendition.themes.font('Times New Roman')
       } else {
-        this.currentBook.rendition.themes.font(font);
+        this.currentBook.rendition.themes.font(font)
       }
     }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

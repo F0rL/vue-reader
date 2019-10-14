@@ -13,7 +13,7 @@ const book = {
     progress: 0,
     section: 0,
     isPaginating: true,
-    currentBook: null, //书籍 new epub
+    currentBook: null, // 书籍 new epub
     navigation: null,
     cover: null,
     metadata: null,

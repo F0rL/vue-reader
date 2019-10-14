@@ -22,22 +22,22 @@
 </template>
 
 <script>
-import { ebookMixin } from "../../utils/mixin";
-import EbookSettingFont from "./EbookSettingFont";
+import { ebookMixin } from '../../utils/mixin'
+import EbookSettingFont from './EbookSettingFont'
 import EbookSettingPopup from './EbookSettingPopup'
 
 export default {
   mixins: [ebookMixin],
   methods: {
-    showSetting(key) {
-      this.setSettingVisible(key);
+    showSetting (key) {
+      this.setSettingVisible(key)
     }
   },
   components: {
     EbookSettingFont,
     EbookSettingPopup
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

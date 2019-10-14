@@ -20,18 +20,18 @@
 </template>
 
 <script>
-import {ebookMixin} from '../../utils/mixin'
+import { ebookMixin } from '../../utils/mixin'
 export default {
-  mixins:[ebookMixin],
+  mixins: [ebookMixin],
   methods: {
-    back() {
-      this.$router.go(-1);
+    back () {
+      this.$router.go(-1)
     },
-    gotoBookStore() {
-      this.$router.push("/book-store");
+    gotoBookStore () {
+      this.$router.push('/book-store')
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

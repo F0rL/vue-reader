@@ -37,28 +37,28 @@
 </template>
 
 <script>
-import { ebookMixin } from "../../utils/mixin";
-import { FONT_SIZE_LIST } from "../../utils/book";
-import { saveFontSize } from "../../utils/localStorage";
+import { ebookMixin } from '../../utils/mixin'
+import { FONT_SIZE_LIST } from '../../utils/book'
+import { saveFontSize } from '../../utils/localStorage'
 
 export default {
-  data() {
+  data () {
     return {
       fontSizeList: FONT_SIZE_LIST
-    };
+    }
   },
   mixins: [ebookMixin],
   methods: {
-    setFontSize(fontSize) {
+    setFontSize (fontSize) {
       this.setDefaultFontSize(fontSize)
       this.currentBook.rendition.themes.fontSize(fontSize)
       saveFontSize(this.fileName, fontSize)
     },
-    showFontFamilyPopup(){
+    showFontFamilyPopup () {
       this.setFontFamilyVisible(true)
     }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

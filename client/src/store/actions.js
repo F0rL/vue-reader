@@ -1,14 +1,14 @@
 const actions = {
-  setFileName: ({commit, state}, newFileName) => {
+  setFileName: ({ commit, state }, newFileName) => {
     return commit('SET_FILENAME', newFileName)
   },
-  setMenuVisible: ({commit, state}, menuVisible) => {
+  setMenuVisible: ({ commit, state }, menuVisible) => {
     return commit('SET_MENUVISIBLE', menuVisible)
   },
-  setSettingVisible: ({commit, state}, settingVisible) => {
+  setSettingVisible: ({ commit, state }, settingVisible) => {
     return commit('SET_SETTINGVISIBLE', settingVisible)
   },
-  setDefaultFontSize: ({commit, state}, defaultFontSize) => {
+  setDefaultFontSize: ({ commit, state }, defaultFontSize) => {
     return commit('SET_DEFAULT_FONT', defaultFontSize)
   },
   setFontFamilyVisible: ({ commit }, visible) => {
@@ -50,13 +50,13 @@ const actions = {
   setPagelist: ({ commit }, pagelist) => {
     return commit('SET_PAGELIST', pagelist)
   },
-  setIsBookmark({ commit }, isBookmark) {
+  setIsBookmark ({ commit }, isBookmark) {
     return commit('SET_IS_BOOKMARK', isBookmark)
   },
-  setOffsetY({ commit }, offsetY) {
+  setOffsetY ({ commit }, offsetY) {
     return commit('SET_OFFSETY', offsetY)
   },
-  setSpeakingIconBottom({ commit }, speakingIconBottom) {
+  setSpeakingIconBottom ({ commit }, speakingIconBottom) {
     commit('SET_SPEAKING_ICON_BOTTOM', speakingIconBottom)
   }
 }

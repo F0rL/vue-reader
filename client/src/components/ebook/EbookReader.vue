@@ -5,100 +5,100 @@
 </template>
 
 <script>
-import Epub from "epubjs";
-global.ePub = Epub;
-import { ebookMixin } from "../../utils/mixin";
+import Epub from 'epubjs'
+import { ebookMixin } from '../../utils/mixin'
 import {
   getFontFamily,
   saveFontFamily,
   getFontSize,
   saveFontSize
-} from "../../utils/localStorage";
+} from '../../utils/localStorage'
+global.ePub = Epub
 
 export default {
   mixins: [ebookMixin],
-  mounted() {
-    const fileName = this.$route.params.fileName.split("|").join("/");
+  mounted () {
+    const fileName = this.$route.params.fileName.split('|').join('/')
     this.setFileName(fileName).then(() => {
-      this.initEpub();
-    });
+      this.initEpub()
+    })
   },
   methods: {
-    prevPage() {
+    prevPage () {
       if (this.rendition) {
-        this.rendition.prev();
-        this.hideTitleAndMenu();
+        this.rendition.prev()
+        this.hideTitleAndMenu()
       }
     },
-    nextPage() {
+    nextPage () {
       if (this.rendition) {
-        this.rendition.next();
-        this.hideTitleAndMenu();
+        this.rendition.next()
+        this.hideTitleAndMenu()
       }
     },
-    toggleTitleAndMenu() {
+    toggleTitleAndMenu () {
       if (this.menuVisible) {
-        this.setSettingVisible(-1);
-        this.setFontFamilyVisible(false);
+        this.setSettingVisible(-1)
+        this.setFontFamilyVisible(false)
       }
-      this.setMenuVisible(!this.menuVisible);
+      this.setMenuVisible(!this.menuVisible)
     },
-    hideTitleAndMenu() {
+    hideTitleAndMenu () {
       // this.$store.dispatch('setMenuVisible', false)
-      this.setMenuVisible(false);
-      this.setSettingVisible(-1);
-      this.setFontFamilyVisible(false);
+      this.setMenuVisible(false)
+      this.setSettingVisible(-1)
+      this.setFontFamilyVisible(false)
     },
-    initFontSize() {
-      let fontSize = getFontSize(this.fileName);
+    initFontSize () {
+      let fontSize = getFontSize(this.fileName)
       if (!fontSize) {
-        saveFontSize(this.fileName, this.defaultFontSize);
+        saveFontSize(this.fileName, this.defaultFontSize)
       } else {
-        this.rendition.themes.fontSize(fontSize);
-        this.setDefaultFontSize(fontSize);
+        this.rendition.themes.fontSize(fontSize)
+        this.setDefaultFontSize(fontSize)
       }
     },
-    initFontFamily() {
-      let font = getFontFamily(this.fileName);
+    initFontFamily () {
+      let font = getFontFamily(this.fileName)
       if (!font) {
-        saveFontFamily(this.fileName, this.defaultFontFamily);
+        saveFontFamily(this.fileName, this.defaultFontFamily)
       } else {
-        this.rendition.themes.font(font);
-        this.setDefaultFontFamily(font);
+        this.rendition.themes.font(font)
+        this.setDefaultFontFamily(font)
       }
     },
-    initEpub() {
-      const url = `${process.env.VUE_APP_RES_URL}/epub/${this.fileName}.epub`;
+    initEpub () {
+      const url = `${process.env.VUE_APP_RES_URL}/epub/${this.fileName}.epub`
       // console.log(url)
-      this.book = new Epub(url);
-      this.setCurrentBook(this.book);
-      this.rendition = this.book.renderTo("read", {
+      this.book = new Epub(url)
+      this.setCurrentBook(this.book)
+      this.rendition = this.book.renderTo('read', {
         width: innerWidth,
         height: innerHeight,
-        method: "default"
-      });
+        method: 'default'
+      })
       this.rendition.display().then(() => {
         this.initFontSize()
         this.initFontFamily()
-      });
-      this.rendition.on("touchstart", event => {
-        this.touchStartX = event.changedTouches[0].clientX;
-        this.touchStartTime = event.timeStamp;
-      });
-      this.rendition.on("touchend", event => {
-        const offsetX = event.changedTouches[0].clientX - this.touchStartX;
-        const time = event.timeStamp - this.touchStartTime;
+      })
+      this.rendition.on('touchstart', event => {
+        this.touchStartX = event.changedTouches[0].clientX
+        this.touchStartTime = event.timeStamp
+      })
+      this.rendition.on('touchend', event => {
+        const offsetX = event.changedTouches[0].clientX - this.touchStartX
+        const time = event.timeStamp - this.touchStartTime
         if (time < 500 && offsetX > 40) {
-          this.prevPage();
+          this.prevPage()
         } else if (time < 500 && offsetX < -40) {
-          this.nextPage();
+          this.nextPage()
         } else {
-          this.toggleTitleAndMenu();
+          this.toggleTitleAndMenu()
         }
-        //禁止默认调用和传播
-        event.preventDefault();
-        event.stopPropagation();
-      });
+        // 禁止默认调用和传播
+        event.preventDefault()
+        event.stopPropagation()
+      })
       this.rendition.hooks.content.register(contents => {
         Promise.all([
           contents.addStylesheet(
@@ -113,11 +113,11 @@ export default {
           contents.addStylesheet(
             `${process.env.VUE_APP_RES_URL}/fonts/tangerine.css`
           )
-        ]).then(() => {});
-      });
+        ]).then(() => {})
+      })
     }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
