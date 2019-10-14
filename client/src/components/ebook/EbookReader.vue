@@ -8,6 +8,12 @@
 import Epub from "epubjs";
 global.ePub = Epub;
 import { ebookMixin } from "../../utils/mixin";
+import {
+  getFontFamily,
+  saveFontFamily,
+  getFontSize,
+  saveFontSize
+} from "../../utils/localStorage";
 
 export default {
   mixins: [ebookMixin],
@@ -43,9 +49,27 @@ export default {
       this.setSettingVisible(-1);
       this.setFontFamilyVisible(false);
     },
+    initFontSize() {
+      let fontSize = getFontSize(this.fileName);
+      if (!fontSize) {
+        saveFontSize(this.fileName, this.defaultFontSize);
+      } else {
+        this.rendition.themes.fontSize(fontSize);
+        this.setDefaultFontSize(fontSize);
+      }
+    },
+    initFontFamily() {
+      let font = getFontFamily(this.fileName);
+      if (!font) {
+        saveFontFamily(this.fileName, this.defaultFontFamily);
+      } else {
+        this.rendition.themes.font(font);
+        this.setDefaultFontFamily(font);
+      }
+    },
     initEpub() {
       const url = `${process.env.VUE_APP_RES_URL}/epub/${this.fileName}.epub`;
-      console.log(url)
+      // console.log(url)
       this.book = new Epub(url);
       this.setCurrentBook(this.book);
       this.rendition = this.book.renderTo("read", {
@@ -53,7 +77,10 @@ export default {
         height: innerHeight,
         method: "default"
       });
-      this.rendition.display();
+      this.rendition.display().then(() => {
+        this.initFontSize()
+        this.initFontFamily()
+      });
       this.rendition.on("touchstart", event => {
         this.touchStartX = event.changedTouches[0].clientX;
         this.touchStartTime = event.timeStamp;
