@@ -7,8 +7,8 @@
           <span class="icon-forward"></span>
         </div>
         <div class="progress-wrapper">
-          <div class="progress-icon-wrapper">
-            <span class="icon-back" @click="prevSection()"></span>
+          <div class="progress-icon-wrapper" @click="prevSection">
+            <span class="icon-back"></span>
           </div>
           <input
             class="progress"
@@ -22,8 +22,8 @@
             :disabled="!bookAvailable"
             ref="progress"
           />
-          <div class="progress-icon-wrapper">
-            <span class="icon-forward" @click="nextSection()"></span>
+          <div class="progress-icon-wrapper" @click="nextSection">
+            <span class="icon-forward"></span>
           </div>
         </div>
         <div class="text-wrapper">
@@ -63,8 +63,27 @@ export default {
     updateProgressBg() {
       this.$refs.progress.style.backgroundSize = `${this.progress}% 100%`
     },
-    prevSection() {},
-    nextSection() {},
+    prevSection() {
+      if (this.section > 0 && this.bookAvailable) {
+        this.displaySection(this.section - 1)
+      }
+    },
+    nextSection() {
+      if (
+        this.section < this.currentBook.spine.length - 1 &&
+        this.bookAvailable
+      ) {
+        this.displaySection(this.section + 1)
+      }
+    },
+    displaySection(section) {
+      this.setSection(section).then(() => {
+        const sectionInfo = this.currentBook.section(this.section)
+        if (sectionInfo && sectionInfo.href) {
+          this.currentBook.rendition.display(sectionInfo.href)
+        }
+      })
+    },
     updated() {
       // 解决初始状态进度条问题
       this.updateProgressBg()
@@ -109,6 +128,7 @@ export default {
         -webkit-appearance: none;
         height: px2rem(2);
         margin: 0 px2rem(10);
+        background-size: 0 100%;
         &:focus {
           outline: none;
         }

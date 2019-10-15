@@ -10,8 +10,8 @@ const book = {
     fontFamilyVisible: false,
     defaultTheme: 'Default',
     bookAvailable: false,
-    progress: 0,
-    section: 0,
+    progress: 0, // 当前进度
+    section: 0, // 当前章节位置
     isPaginating: true,
     currentBook: null, // 书籍 new epub
     navigation: null,
