@@ -3,7 +3,7 @@
     <div class="setting-wrapper" v-show="menuVisible && settingVisible === 2">
       <div class="setting-progress">
         <div class="read-time-wrapper">
-          <span class="read-time-text">111</span>
+          <span class="read-time-text">{{getReadTimeText()}}</span>
           <span class="icon-forward"></span>
         </div>
         <div class="progress-wrapper">
@@ -37,6 +37,7 @@
 
 <script>
 import { ebookMixin } from '../../utils/mixin'
+import { getReadTime } from '../../utils/localStorage'
 export default {
   mixins: [ebookMixin],
   computed: {
@@ -70,14 +71,16 @@ export default {
       const cfi = this.currentBook.locations.cfiFromPercentage(
         this.progress / 100
       )
-      this.currentBook.rendition.display(cfi)
+      this.display(cfi)
     },
     updateProgressBg() {
       this.$refs.progress.style.backgroundSize = `${this.progress}% 100%`
     },
     prevSection() {
       if (this.section > 0 && this.bookAvailable) {
-        this.displaySection(this.section - 1)
+        this.setSection(this.section - 1).then(() => {
+          this.displaySection()
+        })
       }
     },
     nextSection() {
@@ -85,31 +88,34 @@ export default {
         this.section < this.currentBook.spine.length - 1 &&
         this.bookAvailable
       ) {
-        this.displaySection(this.section + 1)
+        this.setSection(this.section + 1).then(() => {
+          this.displaySection()
+        })
       }
     },
-    displaySection(section) {
-      this.setSection(section).then(() => {
-        const sectionInfo = this.currentBook.section(this.section)
-        if (sectionInfo && sectionInfo.href) {
-          this.currentBook.rendition.display(sectionInfo.href).then(() => {
-            this.refreshLocation()
-          })
-        }
-      })
+    displaySection() {
+      const sectionInfo = this.currentBook.section(this.section)
+      if (sectionInfo && sectionInfo.href) {
+        this.currentBook.rendition.display(sectionInfo.href).then(() => {
+          this.refreshLocation()
+        })
+      }
     },
-    refreshLocation() {
-      const currentLocation = this.currentBook.rendition.currentLocation()
-      const progress = this.currentBook.locations.percentageFromCfi(
-        currentLocation.start.cfi
-      )
-      this.setProgress(Math.floor(progress * 100))
-      this.updateProgressBg()
+    getReadTimeText() {
+      return  this.$t('book.haveRead').replace('$1', this.getReadTimeByMinute())
     },
-    updated() {
-      // 解决初始状态进度条问题
-      this.updateProgressBg()
+    getReadTimeByMinute(){
+      const readTime = getReadTime(this.fileName)
+      if(!readTime) {
+        return 0
+      }else {
+        return Math.ceil(readTime / 60)
+      }
     }
+  },
+  updated() {
+    // 解决初始状态进度条和更新问题
+    this.updateProgressBg()
   }
 }
 </script>

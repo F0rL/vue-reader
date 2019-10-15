@@ -13,7 +13,8 @@ import {
   getFontSize,
   saveFontSize,
   getTheme,
-  saveTheme
+  saveTheme,
+  getLocation
 } from '../../utils/localStorage'
 global.ePub = Epub
 
@@ -28,13 +29,17 @@ export default {
   methods: {
     prevPage() {
       if (this.rendition) {
-        this.rendition.prev()
+        this.rendition.prev().then(() => {
+          this.refreshLocation()
+        })
         this.hideTitleAndMenu()
       }
     },
     nextPage() {
       if (this.rendition) {
-        this.rendition.next()
+        this.rendition.next().then(() => {
+          this.refreshLocation()
+        })
         this.hideTitleAndMenu()
       }
     },
@@ -87,7 +92,8 @@ export default {
         height: innerHeight,
         method: 'default'
       })
-      this.rendition.display().then(() => {
+      const location = getLocation(this.fileName)
+      this.display(location, () => {
         this.initFontSize()
         this.initFontFamily()
         this.initTheme()
@@ -147,6 +153,7 @@ export default {
         .then(locations => {
           // console.log(locations)
           this.setBookAvailable(true)
+          this.refreshLocation()
         })
     }
   }
