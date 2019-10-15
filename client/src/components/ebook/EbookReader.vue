@@ -50,12 +50,6 @@ export default {
       }
       this.setMenuVisible(!this.menuVisible)
     },
-    hideTitleAndMenu() {
-      // this.$store.dispatch('setMenuVisible', false)
-      this.setMenuVisible(false)
-      this.setSettingVisible(-1)
-      this.setFontFamilyVisible(false)
-    },
     initFontSize() {
       let fontSize = getFontSize(this.fileName)
       if (!fontSize) {
@@ -136,6 +130,19 @@ export default {
         event.stopPropagation()
       })
     },
+    parseBook() {
+      this.book.loaded.cover.then(cover => {
+        this.book.archive.createUrl(cover).then(url => {
+          this.setCover(url)
+        })
+      })
+      this.book.loaded.metadata.then(metadata => {
+        this.setMetadata(metadata)
+      })
+      this.book.loaded.navigation.then(nav => {
+        console.log(nav)
+      })
+    },
     initEpub() {
       const url = `${process.env.VUE_APP_RES_URL}/epub/${this.fileName}.epub`
       // console.log(url)
@@ -143,6 +150,7 @@ export default {
       this.setCurrentBook(this.book)
       this.initRenditon()
       this.initGesture()
+      this.parseBook()
       this.book.ready
         .then(() => {
           // 粗糙的分页
