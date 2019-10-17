@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import Bookmark from '../commom/Bookmark'
+import Bookmark from '../common/Bookmark'
 import { realPx } from '../../utils/utils'
 import { ebookMixin } from '../../utils/mixin'
-import {getBookmark, saveBookmark} from '../../utils/localStorage'
+import { getBookmark, saveBookmark } from '../../utils/localStorage'
 
 const BLUE = '#346cbc'
 const WHITE = '#fff'
@@ -62,9 +62,9 @@ export default {
     },
     isBookmark(v) {
       this.isFixed = v
-      if(v) {
+      if (v) {
         this.color = BLUE
-      }else {
+      } else {
         this.color = WHITE
       }
     }
@@ -72,7 +72,7 @@ export default {
   methods: {
     addBookmark() {
       this.bookmark = getBookmark(this.fileName)
-      if(!this.bookmark) {
+      if (!this.bookmark) {
         this.bookmark = []
       }
       const currentLocation = this.currentBook.rendition.currentLocation()
@@ -85,7 +85,7 @@ export default {
         .replace(/\)$/, '')
       const cfirange = `${cfibase}!,${cfistart},${cfiend})`
       this.currentBook.getRange(cfirange).then(range => {
-        const text =range.toString().replace(/\s\s/g,'')
+        const text = range.toString().replace(/\s\s/g, '')
         this.bookmark.push({
           cfi: currentLocation.start.cfi,
           text: text
@@ -97,8 +97,11 @@ export default {
       const currentLocation = this.currentBook.rendition.currentLocation()
       const cfi = currentLocation.start.cfi
       this.bookmark = getBookmark(this.fileName)
-      if(this.bookmark) {
-        saveBookmark(this.fileName,this.bookmark.filter(item => item.cfi !== cfi))
+      if (this.bookmark) {
+        saveBookmark(
+          this.fileName,
+          this.bookmark.filter(item => item.cfi !== cfi)
+        )
         this.setIsBookmark(false)
       }
     },

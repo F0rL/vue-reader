@@ -33,7 +33,7 @@
 <script>
 import { ebookMixin } from '../../utils/mixin'
 import EbookSlideContent from './EbookSlideContent'
-import EbookSlideMark from './EbookSlideMark'
+import EbookSlideMark from './EbookSlideBookmark'
 import EbookLoading from './EbookLoading'
 
 export default {

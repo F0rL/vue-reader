@@ -67,7 +67,7 @@
 
 <script>
 import { ebookMixin } from '../../utils/mixin'
-import Scroll from '../commom/Scroll'
+import Scroll from '../common/Scroll'
 import { px2rem } from '../../utils/utils'
 
 export default {

@@ -85,14 +85,14 @@ export const ebookMixin = {
         saveLocation(this.fileName, startCfi)
 
         const bookmark = getBookmark(this.fileName)
-        if(bookmark) {
-          if(bookmark.some(item => item.cfi === startCfi)) {
+        if (bookmark) {
+          if (bookmark.some(item => item.cfi === startCfi)) {
             this.setIsBookmark(true)
-          }else {
+          } else {
             this.setIsBookmark(false)
           }
-        }else {
-          this.setIsBookmark(false)          
+        } else {
+          this.setIsBookmark(false)
         }
       }
     },
@@ -116,7 +116,10 @@ export const ebookMixin = {
       this.setFontFamilyVisible(false)
     },
     getReadTimeText() {
-      return this.$t('book.haveRead').replace('$1', getReadTimeByMinute(this.fileName))
+      return this.$t('book.haveRead').replace(
+        '$1',
+        getReadTimeByMinute(this.fileName)
+      )
     }
   }
 }
