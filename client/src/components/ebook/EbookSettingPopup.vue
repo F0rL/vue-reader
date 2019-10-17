@@ -62,7 +62,7 @@ export default {
   position: absolute;
   bottom: 0;
   left: 0;
-  z-index: 300;
+  z-index: 190;
   width: 100%;
   background-color: white;
   box-shadow: 0 px2rem(-4) px2rem(6) rgba(0, 0, 0, 0.15);
