@@ -40,9 +40,17 @@ export default {
       intervalTime: 25
     }
   },
+  watch: {
+    flapCardVisible(v) {
+      if (v) {
+        this.startFlapCardAnimation()
+      }
+    }
+  },
   methods: {
     close() {
       this.setFlapCardVisible(false)
+      this.stopAnimation()
     },
     semicircleStyle(item, dir) {
       return {
@@ -79,11 +87,14 @@ export default {
       }
       this.rotate(this.front, 'front')
       this.rotate(this.back, 'back')
-      if(frontFlapCard.rotateDegree === 180 && backFlapCard.rotateDegree === 0){
+      if (
+        frontFlapCard.rotateDegree === 180 &&
+        backFlapCard.rotateDegree === 0
+      ) {
         this.next()
       }
     },
-    next(){
+    next() {
       const frontFlapCard = this.flapCardList[this.front]
       const backFlapCard = this.flapCardList[this.back]
       frontFlapCard.rotateDegree = 0
@@ -95,14 +106,14 @@ export default {
       this.front++
       this.back++
       const len = this.flapCardList.length
-      if(this.front >= len){
+      if (this.front >= len) {
         this.front = 0
       }
-      if(this.back >= len){
+      if (this.back >= len) {
         this.back = 0
       }
       this.flapCardList.forEach((item, index) => {
-        item.zIndex = 100 - ((index- this.front + len) % len)
+        item.zIndex = 100 - ((index - this.front + len) % len)
       })
       this.prepare()
     },
@@ -114,13 +125,27 @@ export default {
     },
     startFlapCardAnimation() {
       this.prepare()
-      setInterval(() => {
+      this.task = setInterval(() => {
         this.flapCardRotate()
       }, this.intervalTime)
+    },
+    reset() {
+      this.front = 0
+      this.back = 1
+      this.flapCardList.forEach((item, index) => {
+        item.zIndex = 100 - index
+        item._g = item.g
+        item.rotateDegree = 0
+        this.rotate(index, 'front')
+        this.rotate(index, 'back')
+      })
+    },
+    stopAnimation() {
+      if (this.task) {
+        clearInterval(this.task)
+      }
+      this.reset()
     }
-  },
-  mounted() {
-    this.startFlapCardAnimation()
   }
 }
 </script>
