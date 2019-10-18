@@ -1,4 +1,4 @@
-$animationTime: .2s;
+$animationTime: 0.2s;
 $animationType: linear;
 
 $ratio: 375 / 10;
@@ -10,6 +10,15 @@ $ratio: 375 / 10;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@mixin absCenter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
 }
 
 @mixin left {
@@ -46,5 +55,3 @@ $ratio: 375 / 10;
   text-overflow: ellipsis;
   word-break: keep-all;
 }
-
-
