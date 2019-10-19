@@ -40,7 +40,7 @@
     >
       <div class="book-card-wrapper">
         <div class="img-wrapper">
-          <img class="img" v-lazy="data ? data.cover : ''" />
+          <img class="img" :src="data ? data.cover : ''" />
         </div>
         <div class="content-wrapper">
           <div class="content-title">{{data ? data.title : ''}}</div>

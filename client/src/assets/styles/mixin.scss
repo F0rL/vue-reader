@@ -1,15 +1,24 @@
-$animationTime: 0.2s;
+$animationTime: .2s;
 $animationType: linear;
-
 $ratio: 375 / 10;
+
 @function px2rem($px) {
   @return $px / $ratio + rem;
 }
 
-@mixin center {
+@mixin scroll {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@mixin leftBottom {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-end;
 }
 
 @mixin absCenter {
@@ -21,15 +30,34 @@ $ratio: 375 / 10;
   margin: auto;
 }
 
+@mixin center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 @mixin left {
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
 
+@mixin top {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
 @mixin right {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+}
+
+@mixin columnTop {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
 }
 
@@ -40,10 +68,10 @@ $ratio: 375 / 10;
   align-items: flex-start;
 }
 
-@mixin columnTop {
+@mixin columnCenter {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
 }
 
@@ -61,4 +89,15 @@ $ratio: 375 / 10;
   overflow: hidden;
   text-overflow: ellipsis;
   word-break: keep-all;
+}
+
+.icon {
+  color: #666;
+  font-size: px2rem(16);
+}
+
+.title {
+  color: #666;
+  font-size: px2rem(16);
+  font-weight: bold;
 }
