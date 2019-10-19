@@ -1,6 +1,6 @@
 <template>
   <div class="flap-card-wrapper" v-show="flapCardVisible">
-    <div class="flap-card-bg">
+    <div class="flap-card-bg" :class="{'animation': runFlapCardAnimation}">
       <div
         class="flap-card"
         v-for="(item, index) in flapCardList"
@@ -20,6 +20,14 @@
           ></div>
         </div>
       </div>
+      <div class="point-wrapper">
+        <div
+          class="point"
+          :class="{'animation': runPointAnimation}"
+          v-for="(item, index) in pointList"
+          :key="index"
+        ></div>
+      </div>
     </div>
     <div class="close-btn-wrapper" @click="close">
       <div class="icon-close"></div>
@@ -37,13 +45,16 @@ export default {
       flapCardList,
       front: 0,
       back: 1,
-      intervalTime: 25
+      intervalTime: 25,
+      runFlapCardAnimation: false,
+      pointList: null,
+      runPointAnimation: false
     }
   },
   watch: {
     flapCardVisible(v) {
       if (v) {
-        this.startFlapCardAnimation()
+        this.runAnimation()
       }
     }
   },
@@ -128,6 +139,9 @@ export default {
       this.task = setInterval(() => {
         this.flapCardRotate()
       }, this.intervalTime)
+      setTimeout(() => {
+        this.stopAnimation()
+      }, 2500)
     },
     reset() {
       this.front = 0
@@ -141,10 +155,31 @@ export default {
       })
     },
     stopAnimation() {
+      this.runFlapCardAnimation = false
       if (this.task) {
         clearInterval(this.task)
       }
       this.reset()
+    },
+    runAnimation() {
+      // this.startFlapCardAnimation()
+      this.runFlapCardAnimation = true
+      setTimeout(() => {
+        this.startFlapCardAnimation()
+        this.startPointAnimation()
+      }, 300)
+    },
+    startPointAnimation() {
+      this.runPointAnimation = true
+      setTimeout(() => {
+        this.runPointAnimation = false
+      }, 750)
+    }
+  },
+  created() {
+    this.pointList = []
+    for (let i = 0; i < 18; i++) {
+      this.pointList.push(`point${i}`)
     }
   }
 }
@@ -152,6 +187,7 @@ export default {
 
 <style scoped lang="scss">
 @import '../../assets/styles/global.scss';
+@import '../../assets/styles/flapCard.scss';
 .flap-card-wrapper {
   @include absCenter;
   height: 100%;
@@ -165,6 +201,29 @@ export default {
     width: px2rem(64);
     border-radius: px2rem(5);
     background: white;
+    transform: scale(0);
+    opacity: 0;
+    &.animation {
+      animation: flap-card-move 0.3s ease-in both;
+    }
+    @keyframes flap-card-move {
+      0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.2);
+        opacity: 1;
+      }
+      75% {
+        transform: scale(0.9);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
     .flap-card {
       width: px2rem(48);
       height: px2rem(48);
@@ -189,6 +248,21 @@ export default {
           border-radius: 0 px2rem(24) px2rem(24) 0;
           background-position: center left;
           transform-origin: left;
+        }
+      }
+    }
+    .point-wrapper {
+      z-index: 1500;
+      @include absCenter;
+      .point {
+        border-radius: 50%;
+        @include absCenter;
+        &.animation {
+          @for $i from 1 to length($moves) {
+            &:nth-child(#{$i}) {
+              @include move($i);
+            }
+          }
         }
       }
     }
