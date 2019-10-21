@@ -1,6 +1,15 @@
 import { mapGetters, mapActions } from 'vuex'
 import { themeList, addCss, removeAllCss, getReadTimeByMinute } from './book'
-import { getBookmark, saveLocation } from './localStorage'
+import {
+  getBookmark,
+  saveLocation,
+  getBookShelf,
+  saveBookShelf
+} from './localStorage'
+import {
+  appendAddToShelf
+} from './store'
+import { shelf } from '../api/store'
 
 export const ebookMixin = {
   computed: {
@@ -177,6 +186,25 @@ export const storeShelfMixin = {
       'setOffsetY',
       'setShelfCategory',
       'setCurrentType'
-    ])
+    ]),
+    getShelfList() {
+      let shelfList = getBookShelf()
+      // console.log(shelfList);
+      if (!shelfList) {
+        shelf().then(response => {
+          if (
+            response.status === 200 &&
+            response.data &&
+            response.data.bookList
+          ) {
+            shelfList = appendAddToShelf(response.data.bookList)
+            saveBookShelf(shelfList)
+            return this.setShelfList(shelfList)
+          }
+        })
+      } else {
+        return this.setShelfList(shelfList)
+      }
+    }
   }
 }
