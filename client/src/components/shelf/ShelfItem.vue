@@ -1,5 +1,8 @@
 <template>
-  <div class="shelf-item" :class="{'shelf-item-shadow': data.type === 1 || data.type === 2}">
+  <div class="shelf-item" 
+    :class="{'shelf-item-shadow': data.type === 1 || data.type === 2}"
+    @click="onItemClick"
+    >
     <component :is="item" :data="data"></component>
   </div>
 </template>
@@ -29,6 +32,33 @@ export default {
         : this.data.type === 2
         ? this.category
         : this.add
+    }
+  },
+  methods: {
+    onItemClick() {
+      if (this.isEditMode) {
+        this.data.selected = !this.data.selected
+        if (this.data.selected) {
+          this.shelfSelected.pushWithoutDuplicate(this.data)
+        } else {
+          this.setShelfSelected(
+            this.shelfSelected.filter(item => item.id !== this.data.id)
+          )
+        }
+      } else {
+        if (this.data.type === 1) {
+          this.showBookDetail(this.data)
+        } else if (this.data.type === 2) {
+          this.$router.push({
+            path: '/store/category',
+            query: {
+              title: this.data.title
+            }
+          })
+        } else {
+          gotoStoreHome(this)
+        }
+      }
     }
   }
 }
