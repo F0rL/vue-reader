@@ -8,6 +8,7 @@ import './assets/fonts/cabin.css'
 import './assets/styles/global.scss'
 // import './mock'
 import './utils/boost'
+import './utils/create-api'
 
 Vue.config.productionTip = false
 

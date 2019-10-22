@@ -21,9 +21,16 @@
 
 <script>
 import { storeShelfMixin } from '../../utils/mixin'
+import { saveBookShelf } from '../../utils/localStorage'
+import { download } from '../../api/store'
 
 export default {
   mixins: [storeShelfMixin],
+  data() {
+    return {
+      popupMenu: null
+    }
+  },
   computed: {
     isSelected() {
       return this.shelfSelected && this.shelfSelected.length > 0
@@ -66,7 +73,166 @@ export default {
     }
   },
   methods: {
-    onTabClick() {},
+    onComplete() {
+      this.hidePopup()
+      this.setIsEditMode(false)
+      saveBookShelf(this.shelfList)
+    },
+    hidePopup() {
+      this.popupMenu.hide()
+    },
+    showPrivate() {
+      this.popupMenu = this.popup({
+        title: this.isPrivate
+          ? this.$t('shelf.closePrivateTitle')
+          : this.$t('shelf.setPrivateTitle'),
+        btn: [
+          {
+            text: this.isPrivate
+              ? this.$t('shelf.close')
+              : this.$t('shelf.open'),
+            click: () => {
+              this.setPrivate()
+            }
+          },
+          {
+            text: this.$t('shelf.cancel'),
+            click: () => {
+              this.hidePopup()
+            }
+          }
+        ]
+      }).show()
+    },
+    setPrivate() {
+      let isPrivate
+      if (this.isPrivate) {
+        isPrivate = false
+      } else {
+        isPrivate = true
+      }
+      this.shelfSelected.forEach(book => {
+        book.private = isPrivate
+      })
+      this.onComplete()
+      if (isPrivate) {
+        this.simpleToast(this.$t('shelf.setPrivateSuccess'))
+      } else {
+        this.simpleToast(this.$t('shelf.closePrivateSuccess'))
+      }
+    },
+    showDownload() {
+      this.popupMenu = this.popup({
+        title: this.isDownload
+          ? this.$t('shelf.removeDownloadTitle')
+          : this.$t('shelf.setDownloadTitle'),
+        btn: [
+          {
+            text: this.isDownload
+              ? this.$t('shelf.delete')
+              : this.$t('shelf.open'),
+            click: () => {
+              this.setDownload()
+            }
+          },
+          {
+            text: this.$t('shelf.cancel'),
+            click: () => {
+              this.hidePopup()
+            }
+          }
+        ]
+      }).show()
+    },
+    setDownload() {
+      // let isDownload
+      // if (this.isDownload) {
+      //   isDownload = false
+      // } else {
+      //   isDownload = true
+      // }
+      // this.shelfSelected.forEach(book => {
+      //   book.cache = isDownload
+      // })
+      this.downloadSelectedBook()
+      this.onComplete()
+      // if (isDownload) {
+      //   this.simpleToast(this.$t('shelf.setDownloadSuccess'))
+      // } else {
+      //   this.simpleToast(this.$t('shelf.removeDownloadSuccess'))
+      // }
+    },
+    downloadSelectedBook() {
+      for(let i = 0 ;i < this.shelfSelected.length; i++) {
+        this.downloadBook(this.shelfSelected[i])
+      }
+    },
+    downloadBook(book){
+      console.log(book)
+      return new Promise((resolve, reject) => {
+        download(book, () => {})
+      })
+    },
+    showRemove() {
+      let title
+      if (this.shelfSelected.length === 1) {
+        title = this.$t('shelf.removeBookTitle').replace(
+          '$1',
+          `《${this.shelfSelected[0].title}》`
+        )
+      } else {
+        title = this.$t('shelf.removeBookTitle').replace(
+          '$1',
+          this.$t('shelf.selectedBooks')
+        )
+      }
+      this.popupMenu = this.popup({
+        title: title,
+        btn: [
+          {
+            text: this.$t('shelf.removeBook'),
+            type: 'danger',
+            click: () => {
+              this.removeSelected()
+            }
+          },
+          {
+            text: this.$t('shelf.cancel'),
+            click: () => {
+              this.hidePopup()
+            }
+          }
+        ]
+      }).show()
+    },
+    removeSelected(){
+      this.shelfSelected.forEach(selected => {
+        this.setShelfList(this.shelfList.filter(book => book !== selected))
+      })
+      this.setShelfSelected([])
+      this.onComplete()
+    },
+    onTabClick(item) {
+      if (!this.isSelected) {
+        return
+      }
+      switch (item.index) {
+        case 1:
+          this.showPrivate()
+          break
+        case 2:
+          this.showDownload()
+          break
+        case 3:
+          this.dialog().show()
+          break
+        case 4:
+          this.showRemove()
+          break
+        default:
+          break
+      }
+    },
     label(item) {
       switch (item.index) {
         case 1:
@@ -76,11 +242,6 @@ export default {
         default:
           return item.label
       }
-    }
-  },
-  data() {
-    return {
-      popupMenu: null
     }
   }
 }

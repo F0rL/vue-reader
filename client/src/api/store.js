@@ -1,5 +1,9 @@
 import axios from 'axios'
 
+export function download(book, onSuccess, onError, onProgress) {
+  
+}
+
 export function home() {
   return axios({
     method: 'get',
