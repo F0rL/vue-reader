@@ -144,33 +144,49 @@ export default {
         ]
       }).show()
     },
-    setDownload() {
-      // let isDownload
-      // if (this.isDownload) {
-      //   isDownload = false
-      // } else {
-      //   isDownload = true
-      // }
-      // this.shelfSelected.forEach(book => {
-      //   book.cache = isDownload
-      // })
-      this.downloadSelectedBook()
-      this.onComplete()
-      // if (isDownload) {
-      //   this.simpleToast(this.$t('shelf.setDownloadSuccess'))
-      // } else {
-      //   this.simpleToast(this.$t('shelf.removeDownloadSuccess'))
-      // }
-    },
-    downloadSelectedBook() {
-      for(let i = 0 ;i < this.shelfSelected.length; i++) {
-        this.downloadBook(this.shelfSelected[i])
+    async setDownload() {
+      if (this.isDownload) {
+        this.simpleToast(this.$t('shelf.removeDownloadSuccess'))
+      } else {
+        await this.downloadSelectedBook()
+        this.simpleToast(this.$t('shelf.setDownloadSuccess'))
       }
     },
-    downloadBook(book){
+    async downloadSelectedBook() {
+      for (let i = 0; i < this.shelfSelected.length; i++) {
+        await this.downloadBook(this.shelfSelected[i]).then(book => {
+          book.cache = true
+        })
+      }
+    },
+    downloadBook(book) {
+      let text = ''
+      const toast = this.toast({
+        text
+      })
+      toast.continueShow()
       console.log(book)
       return new Promise((resolve, reject) => {
-        download(book, () => {})
+        download(
+          book,
+          book => {
+            console.log('下载完毕')
+            toast.remove()
+            resolve(book)
+          },
+          reject,
+          progressEvent => {
+            const progress =
+              Math.floor((progressEvent.loaded / progressEvent.total) * 100) +
+              '%'
+            const text = this.$t('shelf.progressDownload').replace(
+              '$1',
+              `${book.fileName}.epub（${progress}）`
+            )
+            // console.log(text)
+            toast.updateText(text)
+          }
+        )
       })
     },
     showRemove() {
@@ -205,7 +221,7 @@ export default {
         ]
       }).show()
     },
-    removeSelected(){
+    removeSelected() {
       this.shelfSelected.forEach(selected => {
         this.setShelfList(this.shelfList.filter(book => book !== selected))
       })
