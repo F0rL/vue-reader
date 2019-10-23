@@ -51,6 +51,7 @@ export default {
       if (this.isEditMode) {
         this.data.selected = !this.data.selected
         if (this.data.selected) {
+          //全局自定义注册的方法
           this.shelfSelected.pushWithoutDuplicate(this.data)
         } else {
           this.setShelfSelected(

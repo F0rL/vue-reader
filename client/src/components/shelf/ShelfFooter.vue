@@ -21,8 +21,9 @@
 
 <script>
 import { storeShelfMixin } from '../../utils/mixin'
-import { saveBookShelf } from '../../utils/localStorage'
+import { saveBookShelf, removeLocalStorage } from '../../utils/localStorage'
 import { download } from '../../api/store'
+import { removeLocalForage } from '../../utils/localForage.js'
 
 export default {
   mixins: [storeShelfMixin],
@@ -146,9 +147,11 @@ export default {
     },
     async setDownload() {
       if (this.isDownload) {
+        this.removeSelectedBook()
         this.simpleToast(this.$t('shelf.removeDownloadSuccess'))
       } else {
         await this.downloadSelectedBook()
+        saveBookShelf(this.shelfList)
         this.simpleToast(this.$t('shelf.setDownloadSuccess'))
       }
     },
@@ -220,6 +223,24 @@ export default {
           }
         ]
       }).show()
+    },
+    removeSelectedBook() {
+      Promise.all(this.shelfSelected.map(book => this.removeBook(book))).then(
+        books => {
+          books.map(book => {
+            book.cache = false
+          })
+          saveBookShelf(this.shelfList)
+          this.simpleToast(this.$t('shelf.removeDownloadSuccess'))
+        }
+      )
+    },
+    removeBook(book) {
+      return new Promise((resolve, reject) => {
+        removeLocalStorage(`${book.categoryText}/${book.fileName}-info`)
+        removeLocalForage(`${book.fileName}`, resolve, reject)
+        resolve(book)
+      })
     },
     removeSelected() {
       this.shelfSelected.forEach(selected => {
