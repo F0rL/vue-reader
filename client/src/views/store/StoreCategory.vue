@@ -1,16 +1,17 @@
 <template>
   <div class="store-shelf">
-    <shelf-title :title="$t('shelf.title')"></shelf-title>
+    <shelf-title :title="shelfCategory.title" :ifShowBack="true"></shelf-title>
     <scroll
       class="store-shelf-scroll-wrapper"
       :top="0"
       :bottom="scrollBottom"
       @onScroll="onScroll"
       ref="scroll"
+      v-if="ifShowList"
     >
-      <shelf-search></shelf-search>
-      <shelf-list :data="shelfList"></shelf-list>
+      <shelf-list :top="42" :data="shelfCategory.itemList"></shelf-list>
     </scroll>
+    <div class="store-shelf-empty-view" v-else>{{$t('shelf.groupNone')}}</div>
     <shelf-footer></shelf-footer>
   </div>
 </template>
@@ -40,6 +41,13 @@ export default {
       })
     }
   },
+  computed: {
+    ifShowList() {
+      return (
+        this.shelfCategory.itemList && this.shelfCategory.itemList.length > 0
+      )
+    }
+  },
   data() {
     return {
       scrollBottom: 0
@@ -51,9 +59,8 @@ export default {
     }
   },
   mounted() {
-    this.getShelfList()
-    this.setShelfCategory([])
-    this.setCurrentType([])
+    this.getCategoryList(this.$route.query.title)
+    this.setCurrentType(2)
   }
 }
 </script>
@@ -66,11 +73,23 @@ export default {
   width: 100%;
   height: 100%;
   background: white;
+
   .store-shelf-scroll-wrapper {
     position: absolute;
     top: 0;
     left: 0;
     z-index: 101;
+  }
+
+  .store-shelf-empty-view {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: px2rem(14);
+    color: #333;
+    @include center;
   }
 }
 </style>
