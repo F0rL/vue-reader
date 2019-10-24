@@ -34,7 +34,8 @@ export default {
   },
   watch: {
     isEditMode(isEditMode) {
-      this.scrollBottom = isEditMode ? 105 : 55
+      // this.scrollBottom = isEditMode ? 105 : 55
+      this.scrollBottom = isEditMode ? 55 : 0
       this.$nextTick(() => {
         this.$refs.scroll.refresh()
       })
@@ -53,7 +54,7 @@ export default {
   mounted() {
     this.getShelfList()
     this.setShelfCategory([])
-    this.setCurrentType([])
+    this.setCurrentType(1)
   }
 }
 </script>

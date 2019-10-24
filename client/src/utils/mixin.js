@@ -6,7 +6,7 @@ import {
   getBookShelf,
   saveBookShelf
 } from './localStorage'
-import { appendAddToShelf, gotoBookDetail } from './store'
+import { appendAddToShelf, gotoBookDetail, computeId, removeAddFromShelf } from './store'
 import { shelf } from '../api/store'
 
 export const ebookMixin = {

@@ -1,6 +1,6 @@
 <template>
   <div class="store-shelf">
-    <shelf-title :title="shelfCategory.title" :ifShowBack="true"></shelf-title>
+    <shelf-title :title="shelfCategory.title"></shelf-title>
     <scroll
       class="store-shelf-scroll-wrapper"
       :top="0"
@@ -35,7 +35,8 @@ export default {
   },
   watch: {
     isEditMode(isEditMode) {
-      this.scrollBottom = isEditMode ? 105 : 55
+      // this.scrollBottom = isEditMode ? 105 : 55
+      this.scrollBottom = isEditMode ? 55 : 0
       this.$nextTick(() => {
         this.$refs.scroll.refresh()
       })

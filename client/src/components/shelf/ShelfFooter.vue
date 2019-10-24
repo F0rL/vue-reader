@@ -146,6 +146,7 @@ export default {
       }).show()
     },
     async setDownload() {
+      this.onComplete()
       if (this.isDownload) {
         this.removeSelectedBook()
         this.simpleToast(this.$t('shelf.removeDownloadSuccess'))
