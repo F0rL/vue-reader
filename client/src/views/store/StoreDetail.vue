@@ -219,7 +219,7 @@ export default {
     parseBook(url) {
       this.book = new Epub(url)
       this.book.loaded.metadata.then(metadata => {
-        console.log(metadata)
+        // console.log(metadata)
         this.metadata = metadata
       })
       this.book.loaded.navigation.then(nav => {
@@ -272,10 +272,10 @@ export default {
       this.$router.go(-1)
     },
     display(location) {
-      console.log(location)
+      // console.log(location)
       if (this.$refs.preview) {
         if (!this.rendition) {
-          console.log(window.innerWidth, window.innerHeight)
+          // console.log(window.innerWidth, window.innerHeight)
           this.rendition = this.book.renderTo('preview', {
             width: window.innerWidth > 640 ? 640 : window.innerWidth,
             height: window.innerHeight,

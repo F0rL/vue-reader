@@ -39,7 +39,8 @@ export default {
     return {
       scrollTop: 94,
       random: null,
-      banner: null,
+      // 为null初始时会报错
+      banner: '',
       guessYouLike: null,
       recommend: null,
       featured: null,
@@ -63,7 +64,7 @@ export default {
       if (res && res.status === 200) {
         const data = res.data
         const randomIndex = Math.floor(Math.random()) * data.random.length
-        console.log(data)
+        // console.log(data)
         this.random = data.random[randomIndex]
         this.banner = data.banner
         this.guessYouLike = data.guessYouLike

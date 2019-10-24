@@ -37,15 +37,15 @@ export default {
     const fileName = books[1]
     getLocalForage(fileName, (err, blob) => {
       if (!err && blob) {
-        console.log('找到离线电子书')
+        // console.log('找到离线电子书')
         this.setFileName(books.join('/')).then(() => {
           this.initEpub(blob)
         })
       } else {
-        console.log('在线获取')
+        // console.log('在线获取')
         this.setFileName(this.$route.params.fileName.split('|').join('/')).then(
           () => {
-            const url = `${process.env.VUE_APP_RES_URL}/epub/${this.fileName}.epub`
+            const url = `${process.env.VUE_APP_EPUB_URL}/${this.fileName}.epub`
             this.initEpub(url)
           }
         )

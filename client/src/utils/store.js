@@ -64,7 +64,7 @@ export function computeId(list) {
   })
 }
 export function gotoBookDetail(vue, book) {
-  console.log('show book detail')
+  // console.log('show book detail')
   vue.$router.push({
     path: '/store/detail',
     query: {

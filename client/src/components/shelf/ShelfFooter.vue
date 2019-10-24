@@ -169,12 +169,12 @@ export default {
         text
       })
       toast.continueShow()
-      console.log(book)
+      // console.log(book)
       return new Promise((resolve, reject) => {
         download(
           book,
           book => {
-            console.log('下载完毕')
+            // console.log('下载完毕')
             toast.remove()
             resolve(book)
           },

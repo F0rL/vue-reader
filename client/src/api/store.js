@@ -19,7 +19,7 @@ export function download(book, onSuccess, onError, onProgress) {
     })
     .get(`${book.categoryText}/${book.fileName}.epub`)
     .then(res => {
-      console.log(res)
+      // console.log(res)
       const blob = new Blob([res.data])
       setLocalForage(
         book.fileName,
@@ -90,7 +90,7 @@ export function downloadMp3(url, cb, cb2) {
       responseType: 'blob',
       timeout: 30 * 1000,
       onDownloadProgress: progressEvent => {
-        console.log(progressEvent)
+        // console.log(progressEvent)
       }
     })
     .get()
