@@ -76,6 +76,7 @@ import Scroll from '../../components/common/Scroll'
 import Toast from '../../components/common/Toast'
 import { detail } from '../../api/store'
 import { px2rem, realPx } from '../../utils/utils'
+import { getLocalForage } from '../../utils/localForage.js'
 import Epub from 'epubjs'
 
 global.ePub = Epub
@@ -88,14 +89,14 @@ export default {
     Toast
   },
   computed: {
-    desc () {
+    desc() {
       if (this.description) {
         return this.description.substring(0, 100)
       } else {
         return ''
       }
     },
-    flatNavigation () {
+    flatNavigation() {
       if (this.navigation) {
         return Array.prototype.concat.apply(
           [],
@@ -108,24 +109,24 @@ export default {
         return []
       }
     },
-    lang () {
+    lang() {
       return this.metadata ? this.metadata.language : '-'
     },
-    isbn () {
+    isbn() {
       return this.metadata ? this.metadata.identifier : '-'
     },
-    publisher () {
+    publisher() {
       return this.metadata ? this.metadata.publisher : '-'
     },
-    title () {
+    title() {
       return this.metadata ? this.metadata.title : ''
     },
-    author () {
+    author() {
       return this.metadata ? this.metadata.creator : ''
     },
-    inBookShelf () {
+    inBookShelf() {
       if (this.bookItem && this.bookShelf) {
-        const flatShelf = (function flatten (arr) {
+        const flatShelf = (function flatten(arr) {
           return [].concat(
             ...arr.map(v => (v.itemList ? [v, ...flatten(v.itemList)] : v))
           )
@@ -139,7 +140,7 @@ export default {
       }
     }
   },
-  data () {
+  data() {
     return {
       bookItem: null,
       book: null,
@@ -158,28 +159,49 @@ export default {
     }
   },
   methods: {
-    addOrRemoveShelf () {},
-    showToast (text) {
+    addOrRemoveShelf() {},
+    showToast(text) {
       this.toastText = text
       this.$refs.toast.show()
     },
-    readBook () {
+    readBook() {
       this.$router.push({
         path: `/ebook/${this.categoryText}|${this.fileName}`
       })
     },
-    trialListening () {},
-    read (item) {
+    trialListening() {
+      getLocalForage(this.bookItem.fileName, (err, blob) => {
+        // 离线
+        if (!err && blob && blob instanceof Blob) {
+          this.$router.push({
+            path: '/store/speaking',
+            query: {
+              fileName: this.bookItem.fileName
+            }
+          })
+        } else {
+          // 在线
+          this.$router.push({
+            path: '/store/speaking',
+            query: {
+              fileName: this.bookItem.fileName,
+              opf: this.opf
+            }
+          })
+        }
+      })
+    },
+    read(item) {
       this.$router.push({
         path: `/ebook/${this.categoryText}|${this.fileName}`
       })
     },
-    itemStyle (item) {
+    itemStyle(item) {
       return {
         marginLeft: (item.deep - 1) * px2rem(20) + 'rem'
       }
     },
-    doFlatNavigation (content, deep = 1) {
+    doFlatNavigation(content, deep = 1) {
       const arr = []
       content.forEach(item => {
         item.deep = deep
@@ -190,13 +212,11 @@ export default {
       })
       return arr
     },
-    downloadBook () {
-      const opf = `${process.env.VUE_APP_EPUB_URL}/${
-        this.bookItem.categoryText
-      }/${this.bookItem.fileName}/OEBPS/package.opf`
+    downloadBook() {
+      const opf = `${process.env.VUE_APP_EPUB_URL}/${this.bookItem.categoryText}/${this.bookItem.fileName}/OEBPS/package.opf`
       this.parseBook(opf)
     },
-    parseBook (url) {
+    parseBook(url) {
       this.book = new Epub(url)
       this.book.loaded.metadata.then(metadata => {
         console.log(metadata)
@@ -220,7 +240,7 @@ export default {
         }
       })
     },
-    init () {
+    init() {
       this.fileName = this.$route.query.fileName
       this.categoryText = this.$route.query.category
       if (this.fileName) {
@@ -240,9 +260,7 @@ export default {
             if (rootFile.startsWith('/')) {
               rootFile = rootFile.substring(1, rootFile.length)
             }
-            this.opf = `${process.env.VUE_APP_EPUB_OPF_URL}/${
-              this.fileName
-            }/${rootFile}`
+            this.opf = `${process.env.VUE_APP_EPUB_OPF_URL}/${this.fileName}/${rootFile}`
             this.parseBook(this.opf)
           } else {
             this.showToast(response.data.msg)
@@ -250,10 +268,10 @@ export default {
         })
       }
     },
-    back () {
+    back() {
       this.$router.go(-1)
     },
-    display (location) {
+    display(location) {
       console.log(location)
       if (this.$refs.preview) {
         if (!this.rendition) {
@@ -271,7 +289,7 @@ export default {
         }
       }
     },
-    onScroll (offsetY) {
+    onScroll(offsetY) {
       if (offsetY > realPx(42)) {
         this.$refs.title.showShadow()
       } else {
@@ -279,14 +297,14 @@ export default {
       }
     }
   },
-  mounted () {
+  mounted() {
     this.init()
   }
 }
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-@import "../../assets/styles/global";
+@import '../../assets/styles/global';
 
 .book-detail {
   width: 100%;
