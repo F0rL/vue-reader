@@ -123,7 +123,7 @@ export default {
       this.firstOffsetY = null
     },
     prevPage() {
-      if (this.rendition) {
+      if (this.rendition && this.rendition.prev) {
         this.rendition.prev().then(() => {
           this.refreshLocation()
         })
