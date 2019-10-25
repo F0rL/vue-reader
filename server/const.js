@@ -1,4 +1,28 @@
-const resUrl = 'http://192.168.1.102:3000'
+const env = require('./env')
+
+let resUrl
+let mp3FilePath
+let dbHost
+let dbUser
+let dbPwd
+let dbName
+
+if (env === 'dev') {
+  resUrl = 'http://192.168.1.102:3000'
+  mp3FilePath = '***'
+  dbHost = '***'
+  dbUser = '***'
+  dbPwd = '***',
+    dbName = '***'
+} else if (env === 'prod') {
+  resUrl = '***'
+  mp3FilePath = '***'
+  dbHost = '***'
+  dbUser = '***'
+  dbPwd = '***',
+    dbName = '***'
+}
+
 
 const category = [
   'Biomedicine',
@@ -25,7 +49,20 @@ const category = [
   'Statistics'
 ]
 
+const userInfo = {
+  'userAvatar': 'https://www.potato369.com/buddhist/images/avatar/5.png',
+  'userNickName': 'Jack',
+  'id': '192040647',
+  'balance': '10'
+}
+
 module.exports = {
   resUrl,
-  category
+  category,
+  mp3FilePath,
+  dbHost,
+  dbUser,
+  dbPwd,
+  dbName,
+  userInfo
 }

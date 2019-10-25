@@ -772,6 +772,11 @@ http-errors@~1.7.2:
     statuses ">= 1.5.0 < 2"
     toidentifier "1.0.0"
 
+http@^0.0.0:
+  version "0.0.0"
+  resolved "https://registry.npm.taobao.org/http/download/http-0.0.0.tgz#86e6326d29c5d039de9fac584a45689f929f4f72"
+  integrity sha1-huYybSnF0Dnen6xYSkVon5KfT3I=
+
 iconv-lite@0.4.24, iconv-lite@^0.4.4:
   version "0.4.24"
   resolved "https://registry.npm.taobao.org/iconv-lite/download/iconv-lite-0.4.24.tgz#2022b4b25fbddc21d2f524974a474aafe733908b"
@@ -1017,6 +1022,16 @@ isobject@^3.0.0, isobject@^3.0.1:
   version "3.0.1"
   resolved "https://registry.npm.taobao.org/isobject/download/isobject-3.0.1.tgz#4e431e92b11a9731636aa1f9c8d1ccbcfdab78df"
   integrity sha1-TkMekrEalzFjaqH5yNHMvP2reN8=
+
+js-base64@^2.5.1:
+  version "2.5.1"
+  resolved "https://registry.npm.taobao.org/js-base64/download/js-base64-2.5.1.tgz#1efa39ef2c5f7980bb1784ade4a8af2de3291121"
+  integrity sha1-Hvo57yxfeYC7F4St5KivLeMpESE=
+
+js-md5@^0.7.3:
+  version "0.7.3"
+  resolved "https://registry.npm.taobao.org/js-md5/download/js-md5-0.7.3.tgz#b4f2fbb0b327455f598d6727e38ec272cd09c3f2"
+  integrity sha1-tPL7sLMnRV9ZjWcn447Ccs0Jw/I=
 
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"
@@ -1486,6 +1501,11 @@ qs@6.7.0:
   version "6.7.0"
   resolved "https://registry.npm.taobao.org/qs/download/qs-6.7.0.tgz?cache=0&sync_timestamp=1569207136481&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fqs%2Fdownload%2Fqs-6.7.0.tgz#41dc1a015e3d581f1621776be31afb2876a9b1bc"
   integrity sha1-QdwaAV49WB8WIXdr4xr7KHapsbw=
+
+qs@^6.9.0:
+  version "6.9.0"
+  resolved "https://registry.npm.taobao.org/qs/download/qs-6.9.0.tgz?cache=0&sync_timestamp=1569207136481&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fqs%2Fdownload%2Fqs-6.9.0.tgz#d1297e2a049c53119cb49cca366adbbacc80b409"
+  integrity sha1-0Sl+KgScUxGctJzKNmrbusyAtAk=
 
 range-parser@~1.2.1:
   version "1.2.1"

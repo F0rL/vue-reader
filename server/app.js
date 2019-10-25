@@ -2,6 +2,7 @@ const express = require('express')
 const mysql = require('mysql')
 const cors = require('cors')
 const constant = require('./const')
+const voice = require('./voice')
 const app = express()
 app.use(cors())
 
@@ -17,25 +18,6 @@ function connect() {
     database: 'ebook_test'
   })
 }
-
-app.get('/book/list', (req, res) => {
-  const conn = connect()
-  conn.query('select * from book', (err, results) => {
-    if (err) {
-      res.json({
-        error_code: 10001,
-        msg: '数据库失败',
-        err
-      })
-    } else {
-      res.json({
-        error_code: 0,
-        data: results
-      })
-    }
-    conn.end()
-  })
-})
 
 function randomArray(n, l) {
   let rnd = []
@@ -117,7 +99,7 @@ function handleData(data) {
   return data
 }
 
-/* 首页接口 */
+// 首页接口
 app.get('/book/home', (req, res) => {
   const conn = connect()
   conn.query("select * from book where cover != \'\'", (err, results) => {
@@ -266,6 +248,7 @@ app.get('/book/home', (req, res) => {
   })
 })
 
+// 详情页
 app.get('/book/detail', (request, response) => {
   const conn = connect()
   const fileName = request.query.fileName
@@ -296,6 +279,77 @@ app.get('/book/detail', (request, response) => {
       }
     }
     conn.end()
+  })
+})
+
+// 列表页
+app.get('/book/list', (request, response) => {
+  const conn = connect()
+  conn.query('SELECT * from book where cover != \'\'', (err, results) => {
+    if (err) {
+      response.json({
+        error_code: 1,
+        msg: '从数据库查询所有小说列表信息失败。',
+        data: null
+      })
+    } else {
+      results.map(item => handleData(item))
+      const data = {}
+      constant.category.forEach(categoryText => {
+        data[categoryText] = results.filter(item => item.categoryText === categoryText)
+      })
+      response.json({
+        error_code: 0,
+        msg: '从数据库查询所有小说列表信息成功。',
+        data: data,
+        total: results.length
+      })
+    }
+    conn.end()
+  })
+})
+
+// 翻转卡片推荐小说接口
+app.get('/book/flat-list', (request, response) => {
+  const conn = connect()
+  conn.query('SELECT * from book where cover != \'\'', (err, results) => {
+    if (err) {
+      response.json({
+        error_code: 1,
+        msg: '从数据库查询所有小说列表信息失败。',
+        data: null
+      })
+    } else {
+      results.map(item => handleData(item))
+      response.json({
+        error_code: 0,
+        msg: '从数据库查询所有小说列表信息成功。',
+        data: results,
+        total: results.length
+      })
+    }
+    conn.end()
+  })
+})
+
+// 书城小说书架数据接口
+app.get('/book/shelf', (request, response) => {
+  response.json({
+    bookList: []
+  })
+})
+
+// 科大讯飞语音合成API接口
+app.get('/voice', (request, response) => {
+  voice(request, response)
+})
+
+// 书城小说用户接口
+app.get('/user/info', (request, response) => {
+  response.json({
+    error_code: 0,
+    msg: '获取微信用户信息成功',
+    userInfo: constant.userInfo
   })
 })
 
